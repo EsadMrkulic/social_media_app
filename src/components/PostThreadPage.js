@@ -9,9 +9,9 @@ export default function PostThreadPage({ postList, commentsList, onSubmit }) {
   postId = parseInt(postId);
 
   const post = postList.find(post => post.id === postId);
-  const comments = commentsList.filter((comment) => comment.postId === postId);
+  const commentsOfPost = commentsList.filter((comment) => comment.postId === postId);
 
-  const [comment, setComment] = useState('');
+
 
   const handleSubmit = (values, { resetForm }) => {
     if (values.comment) {
@@ -28,11 +28,8 @@ export default function PostThreadPage({ postList, commentsList, onSubmit }) {
       </Col>
       <Col>
         <h3>Comments</h3>
-        {console.log(comment)}
-        {comments.length > 0 ? (
-          //comments.map((comment) => (
-            <CommentList key={comment.id} comment={comment} />
-          //))
+        {commentsOfPost.length > 0 ? (
+          <CommentList comments={commentsOfPost} />
         ) : (
           <p>No comments yet.</p>
         )}
@@ -40,6 +37,7 @@ export default function PostThreadPage({ postList, commentsList, onSubmit }) {
           {({ values, handleChange, handleBlur }) => (
             <Form>
               <FormGroup>
+                {/* Add another Label and Input here*/ }
                 <Label for='comment'>Add a comment</Label>
                 <Input
                   type='textarea'

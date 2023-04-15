@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom'
 import HomePage from './components/HomePage'
 import PostThreadPage from './components/PostThreadPage'
 import { Container } from 'reactstrap'
-import { TEST_POSTS } from './TEST_DATA'
+import { TEST_COMMENTS, TEST_POSTS } from './TEST_DATA'
 import PostCreatePage from './components/PostCreatePage'
 import PostEditPage from './components/PostEditPage'
 import LoginForm from './components/LoginForm'
@@ -30,7 +30,7 @@ export default function App() {
     setPostList(postList.map(post => (post.id === editedPostData.id) ? {...post, ...editedPostData} : post))
   }
 
-  const [commentsList, setCommentsList] = useState([]);
+  const [commentsList, setCommentsList] = useState(TEST_COMMENTS);
 
   const addComment = (commentData) => {
     const newComment = {
