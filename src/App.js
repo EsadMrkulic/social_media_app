@@ -1,58 +1,57 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { useState } from 'react'
+import TopBar from './components/TopBar'
+import { Routes, Route } from 'react-router-dom'
+import HomePage from './components/HomePage'
+import PostThreadPage from './components/PostThreadPage'
+import { Container } from 'reactstrap'
+import { TEST_POSTS } from './TEST_DATA'
+import PostCreatePage from './components/PostCreatePage'
+import PostEditPage from './components/PostEditPage'
+import LoginForm from './components/LoginForm'
 
-function App() {
+let newId = 4;
+
+export default function App() {
+  const [postList, setPostList] = useState(TEST_POSTS);
+
+  const deletePost = (idDeletion) => {
+    setPostList( postList.filter(post => post.id !== idDeletion) )
+  };
+
+  const createPost = (newPostData) => {
+    const newPost = {
+      ...newPostData,
+      id: newId++
+    }
+    setPostList(postList.concat(newPost))
+  }
+
+  const editPost = (editedPostData) => {
+    setPostList(postList.map(post => (post.id === editedPostData.id) ? {...post, ...editedPostData} : post))
+  }
+
+  const [commentsList, setCommentsList] = useState([]);
+
+  const addComment = (commentData) => {
+    const newComment = {
+      ...commentData,
+      id: commentsList.length + 1
+    }
+    setCommentsList(commentsList.concat(newComment));
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
+    <>
+      <TopBar/>
+      <Container>
+        <Routes>
+          <Route path='/' element={<LoginForm/>}/>
+          <Route path='/home' element={<HomePage postList={postList} onDelete={deletePost} />}/>
+          <Route path='/post/create' element={<PostCreatePage onSubmit={createPost}/>}/>
+          <Route path='/post/:postId/thread' element={<PostThreadPage postList={postList} commentsList={commentsList} onSubmit={addComment} />}/>
+          <Route path='/post/:postId/edit' element={<PostEditPage onSubmit={editPost} postList={postList}/>}/>
+        </Routes>
+      </Container>
+    </>
+  )
 }
-
-export default App;
