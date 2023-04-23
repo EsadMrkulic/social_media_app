@@ -16,7 +16,7 @@ export default function PostFormPage({ onSubmit, initialValues, editId, buttonLa
             post: textValue
         }
         onSubmit(newPostData)
-        navigate('/')
+        navigate('/home')
     };
     return (
         <div>

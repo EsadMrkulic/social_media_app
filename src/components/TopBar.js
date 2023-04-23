@@ -2,11 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar, NavbarBrand } from 'reactstrap';
 
-export default function TopBar() {
+export default function TopBar({ loggedInUser }) {
     return (
         <Navbar className="my-2" color="secondary" dark>
             <NavbarBrand tag={Link} to='/home'>InstaBook</NavbarBrand>
-            <p>Logged in as: </p>
+            <p style={{color: 'white'}}>Logged in as: {loggedInUser}</p>
         </Navbar>
     );
 }

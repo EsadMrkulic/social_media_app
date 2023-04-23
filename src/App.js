@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { createContext, useState } from 'react'
 import TopBar from './components/TopBar'
 import { Routes, Route } from 'react-router-dom'
 import HomePage from './components/HomePage'
@@ -11,7 +11,17 @@ import LoginForm from './components/LoginForm'
 
 let newId = 4;
 
+export const UserContext = createContext();
+
 export default function App() {
+
+
+  const [loggedInUser, setLoggedInUser] = useState('');
+
+  const handleLogin = (username) => {
+    setLoggedInUser(username);
+  }
+
   const [postList, setPostList] = useState(TEST_POSTS);
 
   const deletePost = (idDeletion) => {
@@ -42,16 +52,18 @@ export default function App() {
 
   return (
     <>
-      <TopBar/>
-      <Container>
-        <Routes>
-          <Route path='/' element={<LoginForm/>}/>
-          <Route path='/home' element={<HomePage postList={postList} onDelete={deletePost} />}/>
-          <Route path='/post/create' element={<PostCreatePage onSubmit={createPost}/>}/>
-          <Route path='/post/:postId/thread' element={<PostThreadPage postList={postList} commentsList={commentsList} onSubmit={addComment} />}/>
-          <Route path='/post/:postId/edit' element={<PostEditPage onSubmit={editPost} postList={postList}/>}/>
-        </Routes>
-      </Container>
+      <UserContext.Provider value={loggedInUser}>
+        <TopBar loggedInUser={loggedInUser}/>
+        <Container>
+          <Routes>
+            <Route path='/' element={<LoginForm onLogin={handleLogin}/>}/>
+            <Route path='/home' element={<HomePage postList={postList} onDelete={deletePost} />}/>
+            <Route path='/post/create' element={<PostCreatePage onSubmit={createPost}/>}/>
+            <Route path='/post/:postId/thread' element={<PostThreadPage postList={postList} commentsList={commentsList} onSubmit={addComment} />}/>
+            <Route path='/post/:postId/edit' element={<PostEditPage onSubmit={editPost} postList={postList}/>}/>
+          </Routes>
+        </Container>
+      </UserContext.Provider>
     </>
   )
 }
